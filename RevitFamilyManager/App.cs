@@ -1,5 +1,7 @@
 #region Namespaces
+
 using Autodesk.Revit.UI;
+using RevitFamilyManager.Data;
 using RevitFamilyManager.Properties;
 using System;
 using System.IO;
@@ -8,134 +10,174 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Xml;
-using RevitFamilyManager.Data;
 
-#endregion
+#endregion Namespaces
 
 namespace RevitFamilyManager
 {
-    class App : IExternalApplication
+    internal class App : IExternalApplication
     {
         public Result OnStartup(UIControlledApplication a)
         {
-            //string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            //string xmlFileName = Path.Combine(assemblyFolder, "FamilyData.xml");
-            //if (!File.Exists(xmlFileName))
-            //{
-            //    XmlWriter writer = XmlWriter.Create(xmlFileName);
-            //}
-            DownloadDataBase();
+            string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string xmlFileName = Path.Combine(assemblyFolder, "FamilyData.xml");
+            if (!File.Exists(xmlFileName))
+            {
+                XmlWriter writer = XmlWriter.Create(xmlFileName);
+            }
+            //DownloadDataBase();
             //Create ribbon tab
-            string tabName = "Familien Manager";
+            string tabName = "族管理";
             a.CreateRibbonTab(tabName);
 
             #region Ribbon buttons
+
             //Create buttons
             string path = Assembly.GetExecutingAssembly().Location;
 
-            //1 Electrical Fixture - Elektroinstallationen
-            PushButtonData buttonElectricalFixture = new PushButtonData("Elektroinstallationen", "Elektro-\ninstallationen", path, "RevitFamilyManager.Families.ElectricalFixture");
-            buttonElectricalFixture.ToolTip = "Shows telephon devices families";
-            buttonElectricalFixture.LargeImage = GetImage(Resources.Electroinstallation.GetHbitmap());
+            //1 电气工具
+            PushButtonData buttonElectricalFixture = new PushButtonData("Elektroinstallationen", "电气\n装置", path, "RevitFamilyManager.Families.ElectricalFixture")
+            {
+                ToolTip = "显示电气设备系列族",
+                LargeImage = GetImage(Resources.Electroinstallation.GetHbitmap())
+            };
 
-            //2 Communication - Kommunikationsger鋞e
-            PushButtonData buttonCommunication = new PushButtonData("Kommunikationsger鋞e", "Kommunikations-\nger鋞e", path, "RevitFamilyManager.Families.Communication");
-            buttonCommunication.ToolTip = "Shows telephon devices families";
-            buttonCommunication.LargeImage = GetImage(Resources.Kommunication.GetHbitmap());
+            //2通讯-通讯设备
+            PushButtonData buttonCommunication = new PushButtonData("通讯设备", "通讯\n设备", path, "RevitFamilyManager.Families.Communication")
+            {
+                ToolTip = "Shows telephon devices families",
+                LargeImage = GetImage(Resources.Kommunication.GetHbitmap())
+            };
 
-            //3 Data - Datenger鋞e
-            PushButtonData buttonData = new PushButtonData("Datenger鋞e", "Daten-\nger鋞e", path, "RevitFamilyManager.Families.Data");
-            buttonData.ToolTip = "Shows telephon devices families";
-            buttonData.LargeImage = GetImage(Resources.Daten.GetHbitmap());
+            //3 数据设备
+            PushButtonData buttonData = new PushButtonData("数据设备", "数据\n设备", path, "RevitFamilyManager.Families.Data")
+            {
+                ToolTip = "显示电话设备系列族",
+                LargeImage = GetImage(Resources.Daten.GetHbitmap())
+            };
 
-            //4 FireAlarm - Brandmeldeger鋞e
-            PushButtonData buttonFireAlarm = new PushButtonData("Brandmeldeger鋞e", "Brandmelde-\nger鋞e", path, "RevitFamilyManager.Families.FireAlarm");
-            buttonFireAlarm.ToolTip = "Shows telephon devices families";
-            buttonFireAlarm.LargeImage = GetImage(Resources.Brandmelder.GetHbitmap());
+            //4 火灾报警器
+            PushButtonData buttonFireAlarm = new PushButtonData("火灾报警器", "火灾\n报警器", path, "RevitFamilyManager.Families.FireAlarm")
+            {
+                ToolTip = "Shows telephon devices families",
+                LargeImage = GetImage(Resources.Brandmelder.GetHbitmap())
+            };
 
-            //5 Lighting - Lichtschalter
-            PushButtonData buttonLighting = new PushButtonData("Lichtschalter", "Lichtschalter", path, "RevitFamilyManager.Families.Lighting");
-            buttonLighting.ToolTip = "Shows telephon devices families";
-            buttonLighting.LargeImage = GetImage(Resources.Lichtschalter.GetHbitmap());
+            //5照明-电灯开关
+            PushButtonData buttonLighting = new PushButtonData("电灯开关", "电气\n装置", path, "RevitFamilyManager.Families.Lighting")
+            {
+                ToolTip = "Shows telephon devices families",
+                LargeImage = GetImage(Resources.Lichtschalter.GetHbitmap())
+            };
 
-            //5 LightingFixtures - Leuchten
-            PushButtonData buttonLightingFixtures = new PushButtonData("Leuchten", "Leuchten", path, "RevitFamilyManager.Families.LightingFixture");
-            buttonLightingFixtures.ToolTip = "Shows telephon devices families";
-            buttonLightingFixtures.LargeImage = GetImage(Resources.Leuchte.GetHbitmap());
+            //5 灯具-灯
+            PushButtonData buttonLightingFixtures = new PushButtonData("灯具", "照片\n设备", path, "RevitFamilyManager.Families.LightingFixture")
+            {
+                ToolTip = "Shows telephon devices families",
+                LargeImage = GetImage(Resources.Leuchte.GetHbitmap())
+            };
 
-            //7 NurseCall - Notrufger鋞e
-            PushButtonData buttonNurseCall = new PushButtonData("Notrufger鋞e", " Notruf-\nger鋞e ", path, "RevitFamilyManager.Families.NurceCall");
-            buttonNurseCall.ToolTip = "Shows telephon devices families";
-            buttonNurseCall.LargeImage = GetImage(Resources.Notruf.GetHbitmap());
+            //7 护士呼叫-紧急呼叫设备
+            PushButtonData buttonNurseCall = new PushButtonData("紧急呼叫设备", "护理\n呼叫", path, "RevitFamilyManager.Families.NurceCall")
+            {
+                ToolTip = "Shows telephon devices families",
+                LargeImage = GetImage(Resources.Notruf.GetHbitmap())
+            };
 
-            //8 Security - Sicherheitsger鋞e
-            PushButtonData buttonSecurity = new PushButtonData("Sicherheitsger鋞e", "Sicherheits-\nger鋞e", path, "RevitFamilyManager.Families.Security");
-            buttonSecurity.ToolTip = "Shows telephon devices families";
-            buttonSecurity.LargeImage = GetImage(Resources.Sicherheit.GetHbitmap());
+            //8 安全-安全设备
+            PushButtonData buttonSecurity = new PushButtonData("安全-安全设备", "安全\n设备", path, "RevitFamilyManager.Families.Security")
+            {
+                ToolTip = "Shows telephon devices families",
+                LargeImage = GetImage(Resources.Sicherheit.GetHbitmap())
+            };
 
-            //9 Phone - Telefonger鋞e
-            PushButtonData buttonPhone = new PushButtonData("Telefonger鋞e", " Telefon-\nger鋞e ", path, "RevitFamilyManager.Families.Phone");
-            buttonPhone.ToolTip = "Shows telephon devices families";
-            buttonPhone.LargeImage = GetImage(Resources.Telefon.GetHbitmap());
+            //9 电话-电话设备
+            PushButtonData buttonPhone = new PushButtonData("电话设备", "电话\n设备", path, "RevitFamilyManager.Families.Phone")
+            {
+                ToolTip = "Shows telephon devices families",
+                LargeImage = GetImage(Resources.Telefon.GetHbitmap())
+            };
 
-            //10 Electroinstallation - Elektrische Ausstattung
-            PushButtonData buttonElectroinstallation = new PushButtonData("ElektrischeAusstattung", "Elektrische\nAusstattung", path, "RevitFamilyManager.Families.Electroinstallation");
-            buttonElectroinstallation.ToolTip = "Shows telephon devices families";
-            buttonElectroinstallation.LargeImage = GetImage(Resources.ElektrischeAusstattung.GetHbitmap());
+            //10 电气安装-电气设备
+            PushButtonData buttonElectroinstallation = new PushButtonData("电气设备", "电气\n设备", path, "RevitFamilyManager.Families.Electroinstallation")
+            {
+                ToolTip = "Shows telephon devices families",
+                LargeImage = GetImage(Resources.ElektrischeAusstattung.GetHbitmap())
+            };
 
-            //11 Annotation - Beschriftungen
-            PushButtonData buttonAnnotation = new PushButtonData("Beschriftungen", "Beschriftungen", path, "RevitFamilyManager.Families.Descriptions");
-            buttonAnnotation.ToolTip = "Shows telephon devices families";
-            buttonAnnotation.LargeImage = GetImage(Resources.Description.GetHbitmap());
+            //11 注释-标题
+            PushButtonData buttonAnnotation = new PushButtonData("标题", "注释\n记号", path, "RevitFamilyManager.Families.Descriptions")
+            {
+                ToolTip = "Shows telephon devices families",
+                LargeImage = GetImage(Resources.Description.GetHbitmap())
+            };
 
-            //12 CableTrayFitting - Leerrohrformteile
-            PushButtonData buttonCableTrayFittings = new PushButtonData("Leerrohrformteile", "Leerrohrform-\nteile", path, "RevitFamilyManager.Families.CableTrayFitting");
-            buttonCableTrayFittings.ToolTip = "Shows telephon devices families";
-            buttonCableTrayFittings.LargeImage = GetImage(Resources.Kabeltrassenformteil.GetHbitmap());
+            //12 电缆桥架配件-空管配件
+            PushButtonData buttonCableTrayFittings = new PushButtonData("电缆配件", "电缆桥架\n配件", path, "RevitFamilyManager.Families.CableTrayFitting")
+            {
+                ToolTip = "Shows telephon devices families",
+                LargeImage = GetImage(Resources.Kabeltrassenformteil.GetHbitmap())
+            };
 
-            //13 Earthing - Erdung
-            PushButtonData buttonEarthing = new PushButtonData("Erdung", "Erdung", path, "RevitFamilyManager.Families.Earthing");
-            buttonEarthing.ToolTip = "Shows earthing families";
-            buttonEarthing.LargeImage = GetImage(Resources.Erdnung.GetHbitmap());
+            //13 接地
+            PushButtonData buttonEarthing = new PushButtonData("接地线", "接地\n设备", path, "RevitFamilyManager.Families.Earthing")
+            {
+                ToolTip = "Shows earthing families",
+                LargeImage = GetImage(Resources.Erdnung.GetHbitmap())
+            };
 
-            //14 GenericModels - Allgemeines Modell
-            PushButtonData buttonGenericModels = new PushButtonData("Allgemeines Modell", "Allgemeines\nModell", path, "RevitFamilyManager.Families.GenericModels");
-            buttonGenericModels.ToolTip = "User Preferences";
-            buttonGenericModels.LargeImage = GetImage(Resources.GenericModels.GetHbitmap());
+            //14 通用模型-通用模型
+            PushButtonData buttonGenericModels = new PushButtonData("通用模型", "常规\n模型", path, "RevitFamilyManager.Families.GenericModels")
+            {
+                ToolTip = "User Preferences",
+                LargeImage = GetImage(Resources.GenericModels.GetHbitmap())
+            };
 
-            //15 Legend - Legende
-            PushButtonData buttonLegend = new PushButtonData("Legende", "Legende", path, "RevitFamilyManager.Families.Legend");
-            buttonLegend.ToolTip = "Legend families";
-            buttonLegend.LargeImage = GetImage(Resources.Legende.GetHbitmap());
+            //15 图例
+            PushButtonData buttonLegend = new PushButtonData("图例", "图例\n颜色填充", path, "RevitFamilyManager.Families.Legend")
+            {
+                ToolTip = "Legend families",
+                LargeImage = GetImage(Resources.Legende.GetHbitmap())
+            };
 
-            //15 Cable Trays - Kabeltrassen
-            PushButtonData buttonCables = new PushButtonData("Kabeltrassen", "Kabeltrassen", path, "RevitFamilyManager.Families.CableTrays");
-            buttonCables.ToolTip = "Cable trays families";
-            buttonCables.LargeImage = GetImage(Resources.Kabeltrasse.GetHbitmap());
+            //15 电缆桥架
+            PushButtonData buttonCables = new PushButtonData("电缆桥架", "电缆\n桥架", path, "RevitFamilyManager.Families.CableTrays")
+            {
+                ToolTip = "Cable trays families",
+                LargeImage = GetImage(Resources.Kabeltrasse.GetHbitmap())
+            };
 
             //---------------------------------------------------------------------
             //14 Settings
-            PushButtonData buttonSettings = new PushButtonData("Settings", "Familien Ordner", path, "RevitFamilyManager.UserSettings");
-            buttonSettings.ToolTip = "User Preferences";
-            buttonSettings.LargeImage = GetImage(Resources.Settings.GetHbitmap());
+            PushButtonData buttonSettings = new PushButtonData("Settings", "族\n文件夹", path, "RevitFamilyManager.UserSettings")
+            {
+                ToolTip = "User Preferences",
+                LargeImage = GetImage(Resources.Settings.GetHbitmap())
+            };
 
             //15 UpdateDB
-            PushButtonData buttonUpdateDb = new PushButtonData("Update DB", "Datenbank\naktualisieren", path, "RevitFamilyManager.Data.UpdateDB");
-            buttonUpdateDb.ToolTip = "UpdateDB";
-            buttonUpdateDb.LargeImage = GetImage(Resources.UpdateDB.GetHbitmap());
+            PushButtonData buttonUpdateDb = new PushButtonData("Update DB", "更新\n数据库", path, "RevitFamilyManager.Data.UpdateDB")
+            {
+                ToolTip = "UpdateDB",
+                LargeImage = GetImage(Resources.UpdateDB.GetHbitmap())
+            };
 
             //16 Create Type Projects ----/Developer tool for Web Application
-            PushButtonData buttonCreateProjects = new PushButtonData("ProjectCreator", "CreateProject", path, "RevitFamilyManager.Data.ProjectCreator");
-            buttonCreateProjects.ToolTip = "Create Projects From Family Type";
-
+            PushButtonData buttonCreateProjects = new PushButtonData("ProjectCreator", "创建\n项目", path, "RevitFamilyManager.Data.ProjectCreator")
+            {
+                ToolTip = "Create Projects From Family Type",
+                LargeImage = GetImage(Resources.RevitLogo.GetHbitmap())
+            };
 
             //Create ribbon panel
-            RibbonPanel toolPanel = a.CreateRibbonPanel(tabName, "Familien Kategorien");
+            RibbonPanel toolPanel = a.CreateRibbonPanel(tabName, "族类别");
 
             //Add buttons to panel
             toolPanel.AddItem(buttonElectricalFixture);
             toolPanel.AddItem(buttonElectroinstallation);
             toolPanel.AddItem(buttonCables);
+            //电缆桥架配件
+            toolPanel.AddItem(buttonCableTrayFittings);
             toolPanel.AddSeparator();
 
             toolPanel.AddItem(buttonLighting);
@@ -150,26 +192,29 @@ namespace RevitFamilyManager
             toolPanel.AddItem(buttonNurseCall);
             toolPanel.AddItem(buttonSecurity);
             toolPanel.AddItem(buttonFireAlarm);
+
             toolPanel.AddItem(buttonEarthing);
-            
+
             toolPanel.AddSeparator();
-            
+
             // toolPanel.AddItem(buttonCableTrayFittings);
             toolPanel.AddItem(buttonGenericModels);
-            //toolPanel.AddItem(buttonAnnotation);
+            toolPanel.AddItem(buttonAnnotation);
             toolPanel.AddItem(buttonLegend);
 
             ///////////////////////////////////////////////
             //----Dev Tools---
             //////////////////////////////////////////////
 
-            //RibbonPanel settingsPanel = a.CreateRibbonPanel(tabName, "Einstellungen");
-            //settingsPanel.AddItem(buttonSettings);
-            //settingsPanel.AddItem(buttonUpdateDb);
-            //settingsPanel.AddItem(buttonCreateProjects);
+            RibbonPanel settingsPanel = a.CreateRibbonPanel(tabName, "设置");
+            settingsPanel.AddItem(buttonSettings);
+            settingsPanel.AddItem(buttonUpdateDb);
+            settingsPanel.AddItem(buttonCreateProjects);
 
             //////////////////////////////////////////////
-            #endregion
+
+            #endregion Ribbon buttons
+
             //Registering Docking panel
             SingleInstallEvent handler = new SingleInstallEvent();
             ExternalEvent exEvent = ExternalEvent.Create(handler);
@@ -203,16 +248,15 @@ namespace RevitFamilyManager
 
         private void DownloadDataBase()
         {
-            //string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            //string xmlFileName = Path.Combine(path, "FamilyData.xml");
+            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string xmlFileName = Path.Combine(path, "FamilyData.xml");
 
-            //string link =
-            //    @"https://forgefiles.blob.core.windows.net/forgefiles/FamilyData.xml";
-            //using (var client = new WebClient())
-            //{
-            //    client.DownloadFile(link, xmlFileName);
-            //}
+            string link =
+                @"https://forgefiles.blob.core.windows.net/forgefiles/FamilyData.xml";
+            using (var client = new WebClient())
+            {
+                client.DownloadFile(link, xmlFileName);
+            }
         }
-
     }
 }

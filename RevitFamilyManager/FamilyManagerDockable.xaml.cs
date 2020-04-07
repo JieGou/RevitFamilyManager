@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Autodesk.Revit.UI;
+using RevitFamilyManager.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,19 +11,17 @@ using System.Linq;
 using System.Reflection;
 using System.Resources;
 using System.Windows;
-using Autodesk.Revit.UI;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using RevitFamilyManager.Data;
 
 namespace RevitFamilyManager
 {
     public partial class FamilyManagerDockable : UserControl, IDockablePaneProvider
     {
-        private const string AllCategories = "Alle Kategorien";
-        private const string SelectCategory = "Wählen Sie Medium";
+        private const string AllCategories = "所有类别";
+        private const string SelectCategory = "选择中";
 
         private ExternalEvent m_ExEvent;
         private SingleInstallEvent m_Handler;
@@ -85,6 +85,7 @@ namespace RevitFamilyManager
         }
 
         #region Filters Methods
+
         private List<FamilyTypeData> FilterMountType(string mountParameter)
         {
             List<FamilyTypeData> filteredFamilies = new List<FamilyTypeData>();
@@ -130,12 +131,15 @@ namespace RevitFamilyManager
             }
             return filteredInstallationMedium;
         }
-        #endregion
+
+        #endregion Filters Methods
 
         private void GetInstallationMedium()
         {
-            List<string> installationMediumCategories = new List<string>();
-            installationMediumCategories.Add(AllCategories);
+            List<string> installationMediumCategories = new List<string>
+            {
+                AllCategories
+            };
             foreach (var item in ListFamilyTypes)
             {
                 installationMediumCategories.Add(item.InstallationMedium);
@@ -195,7 +199,7 @@ namespace RevitFamilyManager
                 filterPlacement.AddRange(FilterPlacement("Boden"));
             }
 
-            filterPlacement.AddRange(FilterPlacement( " --- "));
+            filterPlacement.AddRange(FilterPlacement(" --- "));
 
             var filteredList = filterMount.Intersect(filterPlacement);
             filteredList = filteredList.Intersect(filterInstallationMedium);
@@ -212,6 +216,7 @@ namespace RevitFamilyManager
         {
             FilterFamily();
         }
+
         // --- UP ---
         private void BtnOverheadFilter_Checked(object sender, RoutedEventArgs e)
         {
@@ -266,7 +271,8 @@ namespace RevitFamilyManager
         {
             FilterFamily();
         }
-        #endregion
+
+        #endregion Filter Button Action
 
         private string FileNameCut(string file)
         {
@@ -279,7 +285,9 @@ namespace RevitFamilyManager
         private void FamiliesDataGrid_OnMouseLeave(object sender, MouseEventArgs e)
         {
             if (!string.IsNullOrEmpty(Properties.Settings.Default.FamilyType))
+            {
                 m_ExEvent.Raise();
+            }
         }
 
         private void SetProperty(FamilyTypeData instance)
@@ -303,7 +311,11 @@ namespace RevitFamilyManager
 
         private void FamiliesDataGrid_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (FamiliesDataGrid.Items.Count <= 0) return;
+            if (FamiliesDataGrid.Items.Count <= 0)
+            {
+                return;
+            }
+
             var instance = this.FamiliesDataGrid.SelectedItem as FamilyTypeData;
             // MessageBox.Show(instance.Path);//-----------------------------------------------------------
             if (instance != null)
@@ -318,9 +330,7 @@ namespace RevitFamilyManager
             int nameIndex = userName.IndexOf(@"\");
             userName = userName.Substring(nameIndex + 1);
 
-
             string imagesPath = @"C:\Users\" + userName + @"\HHM\Deployment - General\Revit_Firma\2019\Images Family";
-
 
             string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             Uri uri = null;
